@@ -17,3 +17,16 @@ print("Getting results...")
 result = job.result().get_counts()
 print(result)
 
+
+print("-----------------------------")
+print("Setup second circuit...")
+qc = QuantumCircuit(2)
+qc.h(0)
+qc.measure_all()
+
+print("Run job...")
+job = sim.run(qc, shots=1000)
+
+print("Getting results...")
+result = job.result().get_counts()
+print(result)
