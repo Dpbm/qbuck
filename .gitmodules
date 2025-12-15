@@ -1,0 +1,3 @@
+[submodule "qiskit-aer"]
+	path = qiskit-aer
+	url = https://github.com/Dpbm/qiskit-aer/tree/new-version
