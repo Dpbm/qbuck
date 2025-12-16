@@ -17,3 +17,11 @@ dependencies = [
     "seaborn>=0.13.2",
     "tqdm>=4.67.1",
 ]
+
+[dependency-groups]
+dev = [
+    "clang-format>=21.1.7",
+    "cmake!=3.17.0,!=3.17.1",
+    "conan<2.0.0",
+    "scikit-build>=0.11.0",
+]
