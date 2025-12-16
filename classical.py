@@ -2,13 +2,14 @@ from typing import List, Tuple, Optional
 from abc import ABC, abstractmethod
 from enum import Enum
 import random
+import os
 
 from tqdm import trange
 import pandas as pd
 
 from random_utility import RandomUtility
 
-from constants import CLASSICAL_FILES, TOTAL_RUNS
+from constants import CLASSICAL_FILES, TOTAL_RUNS, TARGET_ASSETS_FOLDER
 
 class Shell(Enum):
     BLANK=0
@@ -277,4 +278,4 @@ if __name__ == "__main__":
 
             df = pd.concat([df,tmp_df],ignore_index=True)
 
-        df.to_csv(file,index=False)
+        df.to_csv(os.path.join(TARGET_ASSETS_FOLDER, file),index=False)

@@ -1,4 +1,5 @@
 from typing import List, Tuple, Callable, TypedDict, Dict, Any
+import os
 
 from tqdm import trange
 import pandas as pd
@@ -9,7 +10,7 @@ from qiskit.circuit.library import XGate, IGate, RYGate, HGate
 from qiskit import generate_preset_pass_manager
 from qiskit.circuit.classical import expr
 
-from constants import TOTAL_RUNS
+from constants import TOTAL_RUNS, TARGET_ASSETS_FOLDER
 
 def player1(total_bullets:int, amount_of_live_shells:int):
     prob_of_live_shell = amount_of_live_shells/total_bullets
@@ -211,7 +212,7 @@ def run_quantum_version(df:pd.DataFrame, file:str, methods:Tuple[Any, Any]):
             tmp_df = pd.DataFrame(results)
             df = pd.concat([df, tmp_df], ignore_index=True)
 
-    df.to_csv(file, index=False)
+    df.to_csv(os.path.join(TARGET_ASSETS_FOLDER, file),index=False)
 
 
 def get_circuit_image():
@@ -229,4 +230,4 @@ def get_circuit_image():
     }
 
     qc = buckshot_roulette(calls, gun, total_bullets, live_shells)
-    qc.draw('mpl', style="clifford", filename="quantum-buckshot-roulette-circuit.png")
+    qc.draw('mpl', style="clifford", filename=os.path.join(TARGET_ASSETS_FOLDER, "quantum-buckshot-roulette-circuit.png"))

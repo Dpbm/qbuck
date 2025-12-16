@@ -11,3 +11,4 @@ TOTAL_RUNS = 1000
 
 MODIFIED_AER_VENV_LIB_PATH = os.path.join(os.getcwd(), "modified-aer-venv", "lib", "python3.12", "site-packages")
 
+TARGET_ASSETS_FOLDER = os.path.join(os.getcwd(), "assets")
