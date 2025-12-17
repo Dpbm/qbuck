@@ -17,4 +17,8 @@ uv run python quantum_default_version.py
 print_blue_line "Run quantum modified version..."
 uv run python quantum_modified_version.py
 
+print_blue_line "Run noisy version..."
+CERTS_PATH=/etc/ssl/certs/ca-certificates.crt #change it depending on your system
+REQUESTS_CA_BUNDLE=$CERTS_PATH uv run --native-tls python quantum_noisy.py
+
 print_green_line "finished!"
