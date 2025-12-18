@@ -13,4 +13,8 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(columns=("eval_i", "winner", "strategy", "total", "rounds"))
     print("Simulating...")
-    run_quantum_version(df, QUANTUM_DEFAULT_VERSION_FILE, (AerSimulator(), SamplerV2()))
+
+    backend = AerSimulator()
+    sampler = SamplerV2.from_backend(backend)
+
+    run_quantum_version(df, QUANTUM_DEFAULT_VERSION_FILE, (backend, sampler))

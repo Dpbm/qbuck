@@ -21,4 +21,7 @@ print_blue_line "Run noisy version..."
 CERTS_PATH=/etc/ssl/certs/ca-certificates.crt #change it depending on your system
 REQUESTS_CA_BUNDLE=$CERTS_PATH uv run --native-tls python quantum_noisy.py
 
+print_blue_line "Running the notebook..."
+uv run jupyter nbconvert --execute analysis.ipynb --inplace
+
 print_green_line "finished!"

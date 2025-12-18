@@ -23,9 +23,10 @@ if __name__ == "__main__":
     print("found: ",backend.name)
 
     sim = AerSimulator.from_backend(backend)
+    sampler = SamplerV2.from_backend(backend)
 
     df = pd.DataFrame(columns=("eval_i", "winner", "strategy", "total", "rounds"))
     print("Simulating...")
-    run_quantum_version(df, QUANTUM_NOISY_VERSION_FILE, (sim, SamplerV2()))
+    run_quantum_version(df, QUANTUM_NOISY_VERSION_FILE, (sim, sampler))
 
 
