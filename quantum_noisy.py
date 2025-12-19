@@ -9,7 +9,7 @@ from qiskit_aer import AerSimulator
 from qiskit_aer.primitives import SamplerV2
 
 from quantum_utils import run_quantum_version
-from constants import QUANTUM_NOISY_VERSION_FILE
+from constants import QUANTUM_NOISY_VERSION_FILE_TORINO, QUANTUM_NOISY_VERSION_FILE_FEZ
 
 if __name__ == "__main__":
     load_dotenv()
@@ -18,15 +18,17 @@ if __name__ == "__main__":
     QiskitRuntimeService.save_account(channel="ibm_quantum_platform", token=os.getenv("IBM_KEY"), instance=os.getenv("CRN"), overwrite=True, set_as_default=True)
     service = QiskitRuntimeService()
 
-    print("finding best backend...")
-    backend = service.least_busy(filters= lambda b : not b.simulator and b.num_qubits >= 9)
-    print("found: ",backend.name)
+    torino_backend = service.backend('ibm_torino')
+    fez_backend = service.backend('ibm_fez')
 
-    sim = AerSimulator.from_backend(backend)
-    sampler = SamplerV2.from_backend(backend)
+    print("BACKENDS: ", torino_backend.name, " ", fez_backend.name)
 
-    df = pd.DataFrame(columns=("eval_i", "winner", "strategy", "total", "rounds"))
-    print("Simulating...")
-    run_quantum_version(df, QUANTUM_NOISY_VERSION_FILE, (sim, sampler))
+    for backend,file in zip((torino_backend,fez_backend), (QUANTUM_NOISY_VERSION_FILE_TORINO, QUANTUM_NOISY_VERSION_FILE_FEZ)):
+        sim = AerSimulator.from_backend(backend)
+        sampler = SamplerV2.from_backend(backend)
+
+        df = pd.DataFrame(columns=("eval_i", "winner", "strategy", "total", "rounds"))
+        print("Simulating ", backend.name, "...")
+        run_quantum_version(df, file, (sim, sampler))
 
 
