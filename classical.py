@@ -275,8 +275,8 @@ class ExpTypes(Enum):
 experiments = {
         ExpTypes.DEFAULT_RANDOM:(DEFAULT_RANDOM_FILE, DefaultRandomEngineNoSeed),
         ExpTypes.DEFAULT_RANDOM_SEED:(DEFAULT_RANDOM_SEED_FILE, DefaultRandomEngineWithSeed),
-        ExpTypes.CPP:(CPP_FILE, CppRandomEngineNoSeed),
-        ExpTypes.CPP_SET_SEED:(CPP_RANDOM_FILE,CppRandomEngineWithSeed)
+        ExpTypes.CPP:(CPP_FILE, CppRandomEngineWithSeed),
+        ExpTypes.CPP_SET_SEED:(CPP_RANDOM_FILE,CppRandomEngineNoSeed)
 }
 
 def setup_and_run_experiment(exp_type:ExpTypes):
