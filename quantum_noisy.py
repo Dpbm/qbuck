@@ -1,6 +1,6 @@
 import os
+from enum import Enum
 
-from dotenv import load_dotenv
 import pandas as pd
 
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -9,26 +9,32 @@ from qiskit_aer import AerSimulator
 from qiskit_aer.primitives import SamplerV2
 
 from quantum_utils import run_quantum_version
-from constants import QUANTUM_NOISY_VERSION_FILE_TORINO, QUANTUM_NOISY_VERSION_FILE_FEZ
+from constants import QUANTUM_NOISY_VERSION_FILE_TORINO, QUANTUM_NOISY_VERSION_FILE_FEZ, IBM_BACKEND_FEZ, IBM_BACKEND_TORINO
 
-if __name__ == "__main__":
-    load_dotenv()
-    
+class Backends(Enum):
+    FEZ=IBM_BACKEND_FEZ
+    TORINO=IBM_BACKEND_TORINO
+
+backends_mapping ={
+        Backends.FEZ:QUANTUM_NOISY_VERSION_FILE_FEZ,
+        Backends.TORINO:QUANTUM_NOISY_VERSION_FILE_TORINO
+}
+
+def run_noisy_experiment(selected_backend:Backends):
     print("Logging into IBM platform...")
-    QiskitRuntimeService.save_account(channel="ibm_quantum_platform", token=os.getenv("IBM_KEY"), instance=os.getenv("CRN"), overwrite=True, set_as_default=True)
-    service = QiskitRuntimeService()
+    service = QiskitRuntimeService(channel="ibm_quantum_platform", token=os.getenv("IBM_KEY"), instance=os.getenv("CRN"))
 
-    torino_backend = service.backend('ibm_torino')
-    fez_backend = service.backend('ibm_fez')
+    backend = service.backend(selected_backend.value)
+    print("USING BACKEND: ", backend.name)
 
-    print("BACKENDS: ", torino_backend.name, " ", fez_backend.name)
+    df = pd.DataFrame(columns=("eval_i", "winner", "strategy", "total", "rounds"))
+    file = backends_mapping[selected_backend]
+    sim = AerSimulator.from_backend(backend)
+    sampler = SamplerV2.from_backend(backend)
 
-    for backend,file in zip((torino_backend,fez_backend), (QUANTUM_NOISY_VERSION_FILE_TORINO, QUANTUM_NOISY_VERSION_FILE_FEZ)):
-        sim = AerSimulator.from_backend(backend)
-        sampler = SamplerV2.from_backend(backend)
+    run_quantum_version(df, file, (sim,sampler))
+        
+    print("Finished noisy experiment!")
 
-        df = pd.DataFrame(columns=("eval_i", "winner", "strategy", "total", "rounds"))
-        print("Simulating ", backend.name, "...")
-        run_quantum_version(df, file, (sim, sampler))
 
 

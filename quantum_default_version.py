@@ -7,7 +7,7 @@ from quantum_utils import get_circuit_image,run_quantum_version
 from constants import QUANTUM_DEFAULT_VERSION_FILE
 
 
-if __name__ == "__main__":
+def run_quantum_default():
     print("Getting circuit image...")
     get_circuit_image()
 
@@ -18,3 +18,4 @@ if __name__ == "__main__":
     sampler = SamplerV2.from_backend(backend)
 
     run_quantum_version(df, QUANTUM_DEFAULT_VERSION_FILE, (backend, sampler))
+    print("Finished quantum default")

@@ -4,12 +4,12 @@ from enum import Enum
 import random
 import os
 
-from tqdm import trange
+from tqdm import trange 
 import pandas as pd
 
 from random_utility import RandomUtility
 
-from constants import CLASSICAL_FILES, TOTAL_RUNS, TARGET_ASSETS_FOLDER
+from constants import DEFAULT_RANDOM_FILE, DEFAULT_RANDOM_SEED_FILE, CPP_RANDOM_FILE, CPP_FILE, TOTAL_RUNS, TARGET_ASSETS_FOLDER
 
 class Shell(Enum):
     BLANK=0
@@ -182,6 +182,7 @@ class Game:
             player = self._current_player
             play = player.play(self._bullets)
             bullet = self._next_bullet
+            self._rounds += 1
 
             if(play == Play.HIMSELF and bullet == Shell.BLANK):
                 if(debug): print("Player shot himself and it was blank")
@@ -191,7 +192,6 @@ class Game:
                 player.decrease_life()
                 self._opponent.add_point()
             elif(play == Play.OPPONENT and bullet == Shell.BLANK):
-
                 if(debug):
                     print("Player shot his opponent and it was blank")
                     print("Next player")
@@ -203,13 +203,10 @@ class Game:
                 self._opponent.decrease_life()
                 self._set_next_player()
             
-            self._rounds += 1
         
         if(debug): print("End game!")
 
         return self._winner, self._rounds
-
-
 
 
 
@@ -243,39 +240,47 @@ class Dealer(Player):
             return Play.OPPONENT
         return Play.HIMSELF
 
-if __name__ == "__main__":
+def execute_experiment(df:pd.DataFrame, file:str, engine:RandomEngine):
+    for evaluation_i in trange(TOTAL_RUNS, desc=file):
+        random_util = RandomUtility()
+        seed = random_util.seed
+        rows = []
 
-    classical_results_no_seed = pd.DataFrame(columns=("eval_i", "shot","winner", "strategy", "rounds"))
-    classical_results_with_seed = pd.DataFrame(columns=("eval_i", "shot","winner", "strategy", "rounds"))
-    classical_results_cpp_no_seed = pd.DataFrame(columns=("eval_i", "shot", "winner", "strategy", "rounds"))
-    classical_results_cpp_with_seed = pd.DataFrame(columns=("eval_i", "shot", "winner", "strategy", "rounds"))
-
-    iter_data = zip(
-        (classical_results_no_seed ,classical_results_with_seed, classical_results_cpp_no_seed, classical_results_cpp_with_seed), 
-        CLASSICAL_FILES, 
-        (DefaultRandomEngineNoSeed, DefaultRandomEngineWithSeed, CppRandomEngineNoSeed, CppRandomEngineWithSeed))
-
-    for df,file,engine in iter_data:
-
-        for evaluation_i in trange(TOTAL_RUNS):
-            random_util = RandomUtility()
-            seed = random_util.seed
-            rows = []
-
-            for strategy_i, player in enumerate((Human1, Human2, Human3, Human4)):
-                
-                # pseudo shots
-                for run in range(TOTAL_RUNS):
-                    game = Game(
-                        [Shell.BLANK, Shell.BLANK, Shell.LIVE], 
-                        [player(2, "player", engine), Dealer(2, "dealer", engine)], 
-                        engine)
-                    game.set_seed(seed)
-                    winner,rounds = game.run(debug=False)
-                    rows.append({"eval_i":evaluation_i+1, "winner":winner.name, "shot":run+1, "strategy":strategy_i+1, "rounds":rounds+1})
+        for strategy_i, player in enumerate((Human1, Human2, Human3, Human4)):
             
-            tmp_df = pd.DataFrame(rows)
+            # pseudo shots
+            for run in range(TOTAL_RUNS):
+                game = Game(
+                    [Shell.BLANK, Shell.BLANK, Shell.LIVE], 
+                    [player(2, "player", engine), Dealer(2, "dealer", engine)], 
+                    engine)
+                game.set_seed(seed)
+                winner,rounds = game.run(debug=False)
+                rows.append({"eval_i":evaluation_i+1, "winner":winner.name, "shot":run+1, "strategy":strategy_i+1, "rounds":rounds})
+        
+        tmp_df = pd.DataFrame(rows)
 
-            df = pd.concat([df,tmp_df],ignore_index=True)
+        df = pd.concat([df,tmp_df],ignore_index=True)
+    df.to_csv(os.path.join(TARGET_ASSETS_FOLDER, file),index=False)
 
-        df.to_csv(os.path.join(TARGET_ASSETS_FOLDER, file),index=False)
+def get_df() -> pd.DataFrame:
+    return pd.DataFrame(columns=("eval_i", "shot", "winner", "strategy", "rounds"))
+
+class ExpTypes(Enum):
+    DEFAULT_RANDOM=0
+    DEFAULT_RANDOM_SEED=1
+    CPP=2
+    CPP_SET_SEED=3
+
+experiments = {
+        ExpTypes.DEFAULT_RANDOM:(DEFAULT_RANDOM_FILE, DefaultRandomEngineNoSeed),
+        ExpTypes.DEFAULT_RANDOM_SEED:(DEFAULT_RANDOM_SEED_FILE, DefaultRandomEngineWithSeed),
+        ExpTypes.CPP:(CPP_FILE, CppRandomEngineNoSeed),
+        ExpTypes.CPP_SET_SEED:(CPP_RANDOM_FILE,CppRandomEngineWithSeed)
+}
+
+def setup_and_run_experiment(exp_type:ExpTypes):
+    df = get_df()
+    file,engine = experiments[exp_type]
+    execute_experiment(df,file,engine)
+    print(f"Finished for {exp_type.name}:{file}!")

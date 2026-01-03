@@ -171,10 +171,16 @@ def who_won(measurements:Meas) -> List[Dict[str,int]]:
         player_string = bit_string[3:6][::-1]
         #print("dealer=%s, player=%s"%(dealer_string, player_string))
 
-        if('1' in dealer_string):
+        in_dealer = '1' in dealer_string
+        in_player = '1' in player_string
+
+        if(in_dealer and in_player):
+            continue
+
+        elif(in_dealer):
             results.append({"winner":"player", "total":total, "rounds":dealer_string.index('1')+1})
 
-        elif('1' in player_string):
+        elif(in_player):
             results.append({"winner":"dealer", "total":total, "rounds":player_string.index('1')+1})
 
 
@@ -186,7 +192,7 @@ def run_quantum_version(df:pd.DataFrame, file:str, methods:Tuple[Any, Any]):
     live_shells = 1
     sim,sampler = methods
     pm = generate_preset_pass_manager(backend=sim, optimization_level=2)
-    for evaluation_i in trange(TOTAL_RUNS):
+    for evaluation_i in trange(TOTAL_RUNS, desc=file):
 
         for strategy_i, player in enumerate((player1, player2, player3, player4)):
 
