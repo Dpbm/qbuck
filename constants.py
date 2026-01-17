@@ -16,6 +16,12 @@ QUANTUM_FILES = (QUANTUM_DEFAULT_VERSION_FILE, QUANTUM_MODIFIED_VERSION_FILE, QU
 ALL_FILES = (*CLASSICAL_FILES, *QUANTUM_FILES)
 LABELS = ("python random (random seed)", "python random (static seed)", "cpp (random seed)", "cpp (static seed)", "quantum regular (default AER)", "quantum modified (modified AER - random seed)", "quantum noisy (IBM torino)", "quantum noisy (IBM Fez)")
 
+STRATEGIES_DESCRIPTION = ("Probability Based", "Always Shoot", "50/50", "Always Himself")
+TOTAL_STRATEGIES = len(STRATEGIES_DESCRIPTION)
+
+CLASSICAL_PORTION = LABELS[:4]
+QUANTUM_PORTION = LABELS[4:]
+
 TOTAL_RUNS = 1000
 
 IBM_BACKEND_FEZ = "ibm_fez"
