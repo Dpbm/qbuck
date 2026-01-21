@@ -1,0 +1,151 @@
+digraph{
+	node [style="filled"]	
+	
+	// player = lightblue
+	// dealer = lightgreen
+	
+	P1 [fillcolor="lightblue"]
+	P2 [fillcolor="lightblue"]
+	P3 [fillcolor="lightblue"]
+	P4 [fillcolor="lightblue"]
+	
+	D1 [fillcolor="lightgreen"]
+	D2 [fillcolor="lightgreen"]
+	D3 [fillcolor="lightgreen"]
+
+	Himself1 [fillcolor="lightblue"]
+	Shoot1 [fillcolor="lightblue"]
+	Live1  [fillcolor="lightblue"]
+	Blank1  [fillcolor="lightblue"]
+	Live2 [fillcolor="lightblue"] 
+	Blank2  [fillcolor="lightblue"]
+
+	Himself2 [fillcolor="lightblue"]
+	Shoot2 [fillcolor="lightblue"]
+	Live3  [fillcolor="lightblue"]
+	Blank3  [fillcolor="lightblue"]
+	Live4 [fillcolor="lightblue"] 
+	Blank4  [fillcolor="lightblue"]
+	
+	Himself3 [fillcolor="lightblue"]
+	Shoot3 [fillcolor="lightblue"]
+	
+	Himself7 [fillcolor="lightblue"]
+	Shoot7 [fillcolor="lightblue"]
+
+	Himself4 [fillcolor="lightgreen"]
+	Himself5 [fillcolor="lightgreen"]
+	Himself6 [fillcolor="lightgreen"]
+	Shoot4 [fillcolor="lightgreen"]
+	Shoot5 [fillcolor="lightgreen"]
+	Shoot6 [fillcolor="lightgreen"]
+	Live6 [fillcolor="lightgreen"]
+	Live7 [fillcolor="lightgreen"]
+	Blank6 [fillcolor="lightgreen"]
+	Blank7  [fillcolor="lightgreen"]
+
+	Live5 [fillcolor="lightcoral"]
+
+
+	P1 -> Himself1 [color="lightblue" label="1/2"]
+	P1 -> Shoot1 [color="lightblue" label="1/2"]
+
+	Himself1 -> Live1 [color="lightblue" label="1/3"]
+	Himself1 -> Blank1 [color="lightblue" label="2/3"]
+
+	Shoot1 -> Live2 [color="lightblue" label="1/3"]
+	Shoot1 -> Blank2 [color="lightblue" label="2/3"]
+
+	Blank1 -> P2 [color="lightblue"]
+	Blank2 -> D1 [color="lightgreen"]
+	
+	// part 2 Player
+
+	P2 -> Himself2 [color="lightblue" label="1/2"]
+	P2 -> Shoot2 [color="lightblue" label="1/2"]
+
+
+	Himself2 -> Live3 [color="lightblue" label="1/2"]
+	Himself2 -> Blank3 [color="lightblue" label="1/2"]
+
+	Shoot2 -> Live4 [color="lightblue" label="1/2"]
+	Shoot2 -> Blank4 [color="lightblue" label="1/2"]
+
+	Blank3 -> P3 [color="lightblue"]
+	Blank4 -> D2 [color="lightgreen"]
+	
+	// part 3 Player
+
+	P3 -> Himself3 [color="lightblue" label="1/2"]
+	P3 -> Shoot3 [color="lightblue" label="1/2"]
+
+	Himself3 -> Live5 [color="lightblue" label="1"]
+	Shoot3 -> Live5 [color="lightblue" label="1"]
+
+
+	// --------------------------------------
+	// part 2 dealer
+	
+	D1 -> Himself4 [color="lightgreen" label="1/2"]
+	D1 -> Shoot4 [color="lightgreen" label="1/2"]
+
+	Himself4 -> Live6 [color="lightgreen" label="1/2"]
+	Himself4 -> Blank6 [color="lightgreen" label="1/2"]
+
+	Shoot4 -> Live7 [color="lightgreen" label="1/2"]
+	Shoot4 -> Blank7 [color="lightgreen" label="1/2"]
+
+	Blank6 -> D3 [color="lightgreen"]
+	Blank7 -> P4 [color="lightblue"]
+
+	// part 3 dealer
+
+	D2 -> Himself5 [color="lightgreen" label="1/2"]
+	D2 -> Shoot5 [color="lightgreen" label="1/2"]
+
+	Himself5 -> Live5 [color="lightgreen" label="1"]
+	Shoot5 -> Live5 [color="lightgreen" label="1"]
+
+
+	// part 4 dealer
+
+	D3 -> Himself6 [color="lightgreen" label="1/2"]
+	D3 -> Shoot6 [color="lightgreen" label="1/2"]
+
+	Himself6 -> Live5 [color="lightgreen" label="1"]
+	Shoot6 -> Live5 [color="lightgreen" label="1"]
+
+
+	// ------------------------------------
+	// last player (part 4)
+	
+	P4 -> Himself7 [color="lightblue" label="1/2"]
+	P4 -> Shoot7 [color="lightblue" label="1/2"]
+
+	Himself7 -> Live5 [color="lightblue" label="1"]
+	Shoot7 -> Live5 [color="lightblue" label="1"]
+
+	subgraph legend {
+		graph [
+		    rankdir="TB"
+		];
+
+		LegendTable [shape=box, margin=0, label=<
+		    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="5" CELLPADDING="0" BGCOLOR="white">
+			<TR>
+			    <TD BGCOLOR="lightblue" WIDTH="20" HEIGHT="15"></TD>
+			    <TD ALIGN="left">Player</TD>
+			</TR>
+			<TR>
+			    <TD BGCOLOR="lightgreen" WIDTH="20" HEIGHT="15"></TD>
+			    <TD ALIGN="left">Dealer</TD>
+			</TR>
+			<TR>
+			    <TD BGCOLOR="lightcoral" WIDTH="20" HEIGHT="15"></TD>
+			    <TD ALIGN="left">End</TD>
+			</TR>
+		    </TABLE>
+		>];
+	    }
+
+}

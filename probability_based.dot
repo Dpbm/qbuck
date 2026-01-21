@@ -1,0 +1,40 @@
+digraph{
+	node [style="filled"]	
+
+	HimselfPlayer [fillcolor="lightblue"]
+	Live1 [fillcolor="lightblue"]
+	Live2 [fillcolor="lightblue"]
+	Live3 [fillcolor="lightgreen"]
+	Blank1 [fillcolor="lightblue"]
+	Blank2 [fillcolor="lightblue"]
+	Blank3 [fillcolor="lightgreen"]
+
+
+	HimselfPlayer -> Live1 [color="lightblue" label="1/3"]
+	HimselPlayer -> Blank1 [color="lightblue" label="2/3"]
+	Blank1 -> Live2 [color="lightblue" label="1/2"]
+	Blank1 -> Blank2 [color="lightblue" label="1/2"]
+	Blank2 -> Live3 [color="lightgreen" label="1/2"]
+	Blank2 -> Blank3 [color="lightgreen" label="1/2"]
+
+
+	subgraph legend {
+		graph [
+		    rankdir="TB"
+		];
+
+		LegendTable [shape=box, margin=0, label=<
+		    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="5" CELLPADDING="0" BGCOLOR="white">
+			<TR>
+			    <TD BGCOLOR="lightblue" WIDTH="20" HEIGHT="15"></TD>
+			    <TD ALIGN="left">Player</TD>
+			</TR>
+			<TR>
+			    <TD BGCOLOR="lightgreen" WIDTH="20" HEIGHT="15"></TD>
+			    <TD ALIGN="left">Dealer</TD>
+			</TR>
+		    </TABLE>
+		>];
+	    }
+
+}

@@ -45,10 +45,16 @@ with DAG(
             bash_command="jupyter nbconvert --execute analysis.ipynb --inplace",
             cwd=parent_path)
 
+    run_dot_files = BashOperator(
+            task_id="run_dot_scripts", 
+            bash_command="dot-scripts.sh",
+            cwd=parent_path)
+
     [classical_1, classical_2, classical_3, classical_4] >> setup_modified_aer
     setup_modified_aer >> [quantum_ideal_1, quantum_ideal_2]
     [quantum_ideal_1, quantum_ideal_2] >> quantum_noisy_fez
     [quantum_ideal_1, quantum_ideal_2] >> quantum_noisy_torino
     [quantum_noisy_fez, quantum_noisy_torino] >> run_notebook
+    run_notebook >> run_dot_files
 
     
