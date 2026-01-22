@@ -17,6 +17,7 @@ from classical import setup_and_run_experiment, ExpTypes
 from quantum_modified_version import run_quantum_modified
 from quantum_default_version import run_quantum_default
 from quantum_noisy import run_noisy_experiment, Backends
+from verify_randomness import check_random_seed, check_static_seed
 
 with DAG(
         "experiments",
@@ -49,12 +50,17 @@ with DAG(
             task_id="run_dot_scripts", 
             bash_command="dot-scripts.sh",
             cwd=parent_path)
+    
+    random_fairness_random_seed = PythonOperator(task_id="fairness_random_seed", python_callable=check_random_seed)
+    random_fairness_static_seed = PythonOperator(task_id="fairness_static_seed", python_callable=check_static_seed)
 
     [classical_1, classical_2, classical_3, classical_4] >> setup_modified_aer
     setup_modified_aer >> [quantum_ideal_1, quantum_ideal_2]
     [quantum_ideal_1, quantum_ideal_2] >> quantum_noisy_fez
     [quantum_ideal_1, quantum_ideal_2] >> quantum_noisy_torino
     [quantum_noisy_fez, quantum_noisy_torino] >> run_notebook
-    run_notebook >> run_dot_files
+    [quantum_noisy_fez, quantum_noisy_torino] >> run_dot_files
+    [quantum_noisy_fez, quantum_noisy_torino] >> random_fairness_random_seed
+    [quantum_noisy_fez, quantum_noisy_torino] >> random_fairness_static_seed
 
     
