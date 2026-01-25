@@ -17,7 +17,7 @@ from classical import setup_and_run_experiment, ExpTypes
 from quantum_modified_version import run_quantum_modified
 from quantum_default_version import run_quantum_default
 from quantum_noisy import run_noisy_experiment, Backends
-from verify_randomness import check_random_seed, check_static_seed
+from verify_randomness import check_random_seed, check_static_seed, check_random_seed_compare
 
 with DAG(
         "experiments",
@@ -53,6 +53,7 @@ with DAG(
     
     random_fairness_random_seed = PythonOperator(task_id="fairness_random_seed", python_callable=check_random_seed)
     random_fairness_static_seed = PythonOperator(task_id="fairness_static_seed", python_callable=check_static_seed)
+    random_fairness_random_seed_compare = PythonOperator(task_id="fairness_random_seed_compare", python_callable=check_random_seed_compare)
 
     [classical_1, classical_2, classical_3, classical_4] >> setup_modified_aer
     setup_modified_aer >> [quantum_ideal_1, quantum_ideal_2]
@@ -62,5 +63,6 @@ with DAG(
     [quantum_noisy_fez, quantum_noisy_torino] >> run_dot_files
     [quantum_noisy_fez, quantum_noisy_torino] >> random_fairness_random_seed
     [quantum_noisy_fez, quantum_noisy_torino] >> random_fairness_static_seed
+    [quantum_noisy_fez, quantum_noisy_torino] >> random_fairness_random_seed_compare
 
     
