@@ -41,7 +41,7 @@ In total, we ran $8$ experiments being them:
 
 Each of these ran for $4$ different strategies, being them:
 
-* probability based (check if the probability of being a live shell is $> 50\%$)
+* probability based (check if the probability of being a live shell is $> 50\\%$)
 * always shoot the opponent
 * randomly shoot a player, could be itself or its opponent ($50/50$ strategy)
 * always shoot itself
